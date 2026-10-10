@@ -5,7 +5,7 @@ Snowflake Cortex の音声処理機能（AI_TRANSCRIBE / AI_COMPLETE）を日本
 ## セットアップ
 
 ```bash
-pip install -r requirements.txt
+uv sync
 ```
 
 Snowflake 接続設定: `~/.snowflake/connections.toml` の `[analytics]` を参照。
