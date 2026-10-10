@@ -1,0 +1,47 @@
+# Claude Code project instructions (contains internal resource names)
+claude.md
+
+# Secrets & credentials
+.env
+*.p8
+*.pem
+*.key
+connections.toml
+
+# Audio files
+*.wav
+*.mp3
+*.mp4
+*.m4a
+*.aac
+*.flac
+*.ogg
+*.opus
+audio/
+
+# Ground truth & evaluation data
+data/
+results/
+*.csv
+reference_texts/
+
+# Python
+uv.lock
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store

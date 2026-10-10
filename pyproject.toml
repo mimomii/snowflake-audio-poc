@@ -1,0 +1,11 @@
+[project]
+name = "snowflake-audio-poc"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "editdistance>=0.8.1",
+    "mutagen>=1.48.1",
+    "snowflake-snowpark-python>=1.55.1",
+]
