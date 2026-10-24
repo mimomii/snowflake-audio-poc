@@ -28,13 +28,17 @@ CREATE TABLE IF NOT EXISTS REFERENCE_TEXT (
     LANGUAGE            VARCHAR       DEFAULT 'ja',
     SPEAKERS            INT           DEFAULT 1,
     CATEGORY            VARCHAR,                        -- 問い合わせ / クレーム / ポジティブ
-    ENVIRONMENT         VARCHAR,                        -- 録音環境
+    ENVIRONMENT         VARCHAR,                        -- 静か / うるさい
+    VOICE_TYPE          VARCHAR,                        -- 男性 / 女性
     PII_COUNT           INT,                            -- PII 情報の件数
     DOMAIN_TERM_COUNT   INT,                            -- 専門用語の件数
     NOTES               VARCHAR,
     CREATED_AT          TIMESTAMP_LTZ DEFAULT CURRENT_TIMESTAMP(),
     CONSTRAINT PK_REFERENCE_TEXT PRIMARY KEY (FILE_NAME)
 );
+
+-- 既存テーブルへの追加（初回実行時はスキップされる）
+ALTER TABLE IF EXISTS REFERENCE_TEXT ADD COLUMN IF NOT EXISTS VOICE_TYPE VARCHAR;
 
 -- Step 2: CER 評価結果
 CREATE TABLE IF NOT EXISTS EVALUATION_RESULT (

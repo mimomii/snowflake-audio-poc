@@ -26,6 +26,7 @@ def fetch_transcripts(session, file_name=None):
         SELECT RUN_ID, FILE_NAME, RESULT:text::STRING AS transcript
         FROM DB_ANALYTICS.AUDIO_POC.RUN_LOG
         {where}
+        QUALIFY ROW_NUMBER() OVER (PARTITION BY FILE_NAME ORDER BY STARTED_AT DESC) = 1
         ORDER BY FILE_NAME
     """).collect()
 

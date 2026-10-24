@@ -168,8 +168,37 @@ def main():
             print(f"{row['MODE_OR_MODEL']:<10} {float(row['AVG_CER_RAW']):>11.1%}"
                   f" {float(row['AVG_CER_NORM']):>13.1%} {row['N']:>4}")
 
+        # カテゴリ別
+        _print_breakdown(session, "CATEGORY",    "カテゴリ")
+        # 環境別（静か / うるさい）
+        _print_breakdown(session, "ENVIRONMENT", "環境")
+        # 声種別（男性 / 女性）
+        _print_breakdown(session, "VOICE_TYPE",  "声種別")
+
     finally:
         session.close()
+
+
+def _print_breakdown(session, group_col: str, label: str):
+    rows = session.sql(f"""
+        SELECT
+            t.{group_col}                             AS GRP,
+            ROUND(AVG(e.CER_RAW), 4)        AS AVG_CER_RAW,
+            ROUND(AVG(e.CER_NORMALIZED), 4) AS AVG_CER_NORM,
+            COUNT(*)                         AS N
+        FROM DB_ANALYTICS.AUDIO_POC.EVALUATION_RESULT e
+        JOIN DB_ANALYTICS.AUDIO_POC.REFERENCE_TEXT t ON e.FILE_NAME = t.FILE_NAME
+        GROUP BY t.{group_col}
+        ORDER BY t.{group_col}
+    """).collect()
+    if not rows:
+        return
+    print(f"\n[{label}別]")
+    print(f"{'区分':<12} {'平均CER(RAW)':>12} {'平均CER(正規化)':>14} {'件数':>4}")
+    print(f"{'─'*46}")
+    for row in rows:
+        print(f"{str(row['GRP']):<12} {float(row['AVG_CER_RAW']):>11.1%}"
+              f" {float(row['AVG_CER_NORM']):>13.1%} {row['N']:>4}")
 
 
 if __name__ == "__main__":

@@ -36,6 +36,7 @@ def main():
     parser.add_argument("--dir", help="音声ファイルが入ったディレクトリ")
     parser.add_argument("--mode", default="default", choices=["default", "word", "speaker"],
                         help="予定する transcribe モード（制約チェック用）")
+    parser.add_argument("--overwrite", action="store_true", help="ステージの同名ファイルを上書きする")
     parser.add_argument("--dry-run", action="store_true", help="確認のみ。アップロードは行わない")
     args = parser.parse_args()
 
@@ -95,11 +96,12 @@ def main():
     print("\nアップロード中...")
     session = get_session()
     try:
+        overwrite_flag = "TRUE" if args.overwrite else "FALSE"
         for f in files:
             if not f.exists():
                 continue
             rows = session.sql(
-                f"PUT 'file://{f.resolve()}' {STAGE} AUTO_COMPRESS=FALSE OVERWRITE=FALSE"
+                f"PUT 'file://{f.resolve()}' {STAGE} AUTO_COMPRESS=FALSE OVERWRITE={overwrite_flag}"
             ).collect()
             for row in rows:
                 print(f"  {row['source']}: {row['status']}")
